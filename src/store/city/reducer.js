@@ -1,4 +1,7 @@
 import * as types from './types'
+import {xor} from 'lodash';
+
+export const CITIES_NAME = ["Miami", "Oakland", "Chicago", "Houston", "Dallas", "Austin", "Seattle", "Boston", "Detroit", "Memphis"];
 
 const initialState = {
     selectedCities:[]
@@ -7,10 +10,9 @@ const initialState = {
 export default function cities(state = initialState, action) {
     switch (action.type) {
         case types.SELECT_CITY_SUCCESS:
-            console.log("types.SELECT_CITY_SUCCESS action",action)
             return {
                 ...state,
-                selectedCities: action.payload
+                selectedCities:xor(state.selectedCities, [action.city])
             };
         default:
             return state

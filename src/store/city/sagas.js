@@ -10,9 +10,9 @@ import {
 } from './types'
 
 // worker saga
-export function* selectCity(payload) {
+export function* selectCity({city}) {
     try {
-        yield put({type: SELECT_CITY_SUCCESS, payload});
+        yield put({type: SELECT_CITY_SUCCESS, city});
     } catch (error) {
         console.log(error);
         yield put({type: SELECT_CITY + '_ERROR', error})

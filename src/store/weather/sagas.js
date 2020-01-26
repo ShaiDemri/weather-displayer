@@ -1,23 +1,16 @@
-import {
-    call,
-    put,
-    takeEvery,
-    cancelled,
-    select
-} from 'redux-saga/effects'
-import {
-    FETCH_WEATHER,
-    FETCH_WEATHER_SUCCESS,
-} from './types'
+import {call, cancelled, put, select, takeEvery,all} from 'redux-saga/effects'
+import {FETCH_WEATHER, FETCH_WEATHER_SUCCESS,} from './types'
 
 import {callServer} from '../api'
 
 // worker saga
-export function* fetchWeather(payload) {
+export function* fetchWeather() {
+    const cities = yield select(state=>state.cities.selectedCities);
+
     try {
-        const media = yield call(callServer, '/weather/' + payload.query);
-        yield put({type: FETCH_WEATHER_SUCCESS, media});
-        return media
+        const data=yield all(cities.map(city => call(callServer, city)));
+        yield put({type: FETCH_WEATHER_SUCCESS, data});
+        return data
     } catch (error) {
         console.log(error);
         yield put({type: FETCH_WEATHER + '_ERROR', error})
@@ -27,11 +20,10 @@ export function* fetchWeather(payload) {
         }
     }
 }
-function* fetchWeatherSaga(payload) {
+
+function* fetchWeatherSaga() {
     yield takeEvery(FETCH_WEATHER, fetchWeather);
 }
-
-
 
 export const weatherSagas = [
     call(fetchWeatherSaga),

@@ -1,8 +1,7 @@
 import {FETCH_WEATHER} from './types'
 
-export function fetchWeather(payload) {
+export function fetchWeather() {
     return {
-        type: FETCH_WEATHER,
-        query:payload
+        type: FETCH_WEATHER
     }
 }

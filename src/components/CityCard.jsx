@@ -5,6 +5,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import LabeledCheckbox from "./LabeledCheckbox";
+import {useSelector,shallowEqual} from "react-redux";
 
 const useStyles = makeStyles({
     card: {
@@ -13,13 +14,11 @@ const useStyles = makeStyles({
     title: {
         fontSize: 14,
     },
-    pos: {
-        marginBottom: 12,
-    },
 });
 
-export default function CityCard({cityName='Ohio'}) {
+export default function CityCard({cityName}) {
     const classes = useStyles();
+    const cityData = useSelector(state=>state.weather.citiesData.find(city=>city.city===cityName),shallowEqual);
 
     return (
         <Card className={classes.card} variant="outlined">
@@ -28,7 +27,7 @@ export default function CityCard({cityName='Ohio'}) {
                     City: {cityName}
                 </Typography>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    Temperature: {"--"} °C
+                    Temperature: {cityData?cityData.temp:"--"} °C
                 </Typography>
             </CardContent>
             <CardActions>

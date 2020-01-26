@@ -1,9 +1,9 @@
-import {createStore, applyMiddleware, compose} from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import createSagaMiddleware from 'redux-saga'
-import {createLogger} from 'redux-logger'
+import { createLogger } from 'redux-logger'
 import storage from 'redux-persist/lib/storage';
-import {persistStore, persistReducer} from 'redux-persist'
-import {rootReducer} from './reducers'
+import { persistStore, persistReducer } from 'redux-persist'
+import { rootReducer } from './reducers'
 import rootSaga from './sagas'
 
 export default function configureStore() {
@@ -22,8 +22,7 @@ export default function configureStore() {
 
     const composeEnhancers =
         typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-            ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-                trace: true
+            ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({trace:true
                 // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
             })
             : compose;
@@ -33,7 +32,7 @@ export default function configureStore() {
     const persistorConfig = {
         key: 'root',
         storage,
-        // blacklist: ['']
+        blacklist: ['weather','cities']
     };
 
     const reducer = persistReducer(persistorConfig, rootReducer);
@@ -43,7 +42,10 @@ export default function configureStore() {
     sagaMiddleware.run(rootSaga);
 
     try {
-        persistStore(store);
+
+        // const persistor =
+            persistStore(store);
+        // persistor.purge();
     } catch (e) {
         console.log(e)
     }
